@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package osinfo;
+
+
+// Interface of the service (implemented by server)
+service OSInfoProvider {
+    // Get holistic info about OS
+    rpc GetOSInfo(OSQuery) returns (OSInfo) {}
+
+    // Get info about a specific set (array) of processes
+    rpc ListProcessInfo(stream ProcessQuery) returns (stream ProcessInfo) {}   
+}
+
+// Holistic OS Info
+message OSInfo {
+  string osname = 1;
+  int64 totalRAM = 2;
+}
+
+// Info about a particular process with given `pid`
+message ProcessInfo {
+    int32 pid = 1;
+    string username = 2;
+    double creationTime = 3;
+    repeated int32 children = 4;
+}
+
+// Type that represents the query that is sent to
+// request OSInfo
+message OSQuery {}
+
+// Type that represents the query that is sent to
+// request ProcessInfo
+message ProcessQuery {
+    int32 pid = 1;
+}
